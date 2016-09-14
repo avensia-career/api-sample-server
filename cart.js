@@ -2,8 +2,6 @@
 
 const products = require("./products");
 
-const items = new Map();
-
 const isProduct = function (id) {
   if (id in products) {
     return true;
@@ -18,85 +16,83 @@ const isQuantity = function (quantity) {
   return new Error("Quantity must be a number higher than 0");
 };
 
-const cart = function () {
-  const itemValues = Array.from(items).map((i) => i[1]);
-  return {
-    items: itemValues,
-    summery: ["SEK", "EUR"].map((currency) => ({
-      amount: itemValues.reduce((previous, current) => {
-        const amount = current.details.prices.find((p) => p.currency === currency).amount;
-        const quantity = current.quantity;
-        return previous + amount * quantity;
-      }, 0),
-      currency
-    }))
-  };
-};
-
-cart.add = function (id, quantity) {
-  let error;
-  if ((error = isProduct(id)) !== true) {
-    return error;
+class Cart {
+  constructor() {
+    this.items = new Map();
   }
-  if ((error = isQuantity(quantity)) !== true) {
-    return error;
+  values() {
+    return Array.from(this.items).map((i) => i[1]);
   }
-
-  if (items.has(id)) {
-    const item = items.get(id);
-    item.quantity += quantity;
-    items.set(id, item);
-  } else {
-    items.set(id, {
-      details: products[id],
-      quantity
-    });
+  get() {
+    const items = this.values();
+    return {
+      items,
+      summery: ["SEK", "EUR"].map((currency) => ({
+        amount: items.reduce((previous, current) => {
+          const amount = current.product.prices.find((p) => p.currency === currency).amount;
+          const quantity = current.quantity;
+          return previous + amount * quantity;
+        }, 0),
+        currency
+      }))
+    };
   }
+  add(id, quantity) {
+    let error;
+    if ((error = isProduct(id)) !== true) {
+      return error;
+    }
+    if ((error = isQuantity(quantity)) !== true) {
+      return error;
+    }
 
-  return cart();
-};
+    if (this.items.has(id)) {
+      const item = this.items.get(id);
+      item.quantity += quantity;
+      this.items.set(id, item);
+    } else {
+      this.items.set(id, {
+        product: products[id],
+        quantity
+      });
+    }
 
-cart.update = function (id, quantity) {
-  let error;
-  if ((error = isProduct(id)) !== true) {
-    return error;
+    return this;
   }
-  if ((error = isQuantity(quantity)) !== true) {
-    return error;
+  update(id, quantity) {
+    let error;
+    if ((error = isProduct(id)) !== true) {
+      return error;
+    }
+    if ((error = isQuantity(quantity)) !== true) {
+      return error;
+    }
+
+    if (this.items.has(id)) {
+      const item = this.items.get(id);
+      item.quantity = quantity;
+      this.items.set(id, item);
+    } else {
+      // TODO: Error handling or call `cart.add(id, quantity)`?
+      return this.add(id, quantity);
+    }
+
+    return this;
   }
+  remove(id) {
+    let error;
+    if ((error = isProduct(id)) !== true) {
+      return error;
+    }
 
-  if (items.has(id)) {
-    const item = items.get(id);
-    item.quantity = quantity;
-    items.set(id, item);
-  } else {
-    // TODO: Error handling or call `cart.add(id, quantity)`?
-    cart.add(id, quantity);
+    this.items.delete(id);
+
+    return this;
   }
-
-  return cart();
-};
-
-cart.remove = function (id) {
-  let error;
-  if ((error = isProduct(id)) !== true) {
-    return error;
+  clear() {
+    this.items.clear();
+    return this;
   }
+}
 
-  items.delete(id);
-
-  return cart();
-};
-
-cart.clear = function () {
-  items.clear();
-
-  return cart();
-};
-
-cart.init = function () {
-  cart.clear();
-  return cart.add(0, 1);
-};
-
-module.exports = cart;
+module.exports = Cart;

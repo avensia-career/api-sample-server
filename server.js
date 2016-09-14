@@ -38,36 +38,36 @@ server.use("/products", productsRouter);
  *
  */
 
-const cart = require("./cart");
+const Cart = require("./cart");
 
-cart.init();
+const cart = new Cart();
 
 const cartRouter = router();
 
-const handleRequest = function (action) {
+const cartRequest = function (action) {
   return (req, res, next) => {
     const data = action(req, res);
     if (data instanceof Error) {
       return next(data);
     }
-    return res.json(data);
+    return res.json(data.get());
   };
 };
 
 // GET cart
-cartRouter.get("/", (req, res) => res.json(cart()));
+cartRouter.get("/", cartRequest(() => cart));
 
 // DELETE (empty) cart
-cartRouter.delete("/", handleRequest(() => cart.clear()));
+cartRouter.delete("/", cartRequest(() => cart.clear()));
 
 // POST (create or add) quantity to item by id
-cartRouter.post("/:id", handleRequest((req) => cart.add(+req.params.id, +req.body.quantity || 1)));
+cartRouter.post("/:id", cartRequest((req) => cart.add(+req.params.id, +req.body.quantity || 1)));
 
 // PUT (update) quantity to item by id
-cartRouter.put("/:id", handleRequest((req) => cart.update(+req.params.id, +req.body.quantity)));
+cartRouter.put("/:id", cartRequest((req) => cart.update(+req.params.id, +req.body.quantity)));
 
 // DELETE quantity to item by id
-cartRouter.delete("/:id", handleRequest((req) => cart.remove(+req.params.id)));
+cartRouter.delete("/:id", cartRequest((req) => cart.remove(+req.params.id)));
 
 server.use("/cart", cartRouter);
 
