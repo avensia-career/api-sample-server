@@ -1,0 +1,7 @@
+{
+  "extends": "formidable/configurations/es6-node",
+  "rules": {
+    "max-params": "off",
+    "no-unused-vars": "off"
+  }
+}
