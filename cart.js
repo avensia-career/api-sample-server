@@ -4,6 +4,20 @@ const products = require("./products");
 
 const items = new Map();
 
+const isProduct = function (id) {
+  if (id in products) {
+    return true;
+  }
+  return new Error(`There's no product with id: ${id}`);
+};
+
+const isQuantity = function (quantity) {
+  if (typeof quantity === "number" && quantity > 0) {
+    return true;
+  }
+  return new Error("Quantity must be a number higher than 0");
+};
+
 const cart = function () {
   const itemValues = Array.from(items).map((i) => i[1]);
   return {
@@ -20,8 +34,14 @@ const cart = function () {
 };
 
 cart.add = function (id, quantity) {
-  // TODO: Error handling if `quantity` isn't a number and less than 1
-  // TODO: Error handling if there's not product with id `id`
+  let error;
+  if ((error = isProduct(id)) !== true) {
+    return error;
+  }
+  if ((error = isQuantity(quantity)) !== true) {
+    return error;
+  }
+
   if (items.has(id)) {
     const item = items.get(id);
     item.quantity += quantity;
@@ -37,20 +57,32 @@ cart.add = function (id, quantity) {
 };
 
 cart.update = function (id, quantity) {
-  // TODO: Error handling if `quantity` isn't a number and less than 1
+  let error;
+  if ((error = isProduct(id)) !== true) {
+    return error;
+  }
+  if ((error = isQuantity(quantity)) !== true) {
+    return error;
+  }
+
   if (items.has(id)) {
     const item = items.get(id);
     item.quantity = quantity;
     items.set(id, item);
   } else {
-    // TODO: Error handling or call `add(id, quantity)`?
+    // TODO: Error handling or call `cart.add(id, quantity)`?
+    cart.add(id, quantity);
   }
 
   return cart();
 };
 
 cart.remove = function (id) {
-  // TODO: Error handling if item doesn't exist
+  let error;
+  if ((error = isProduct(id)) !== true) {
+    return error;
+  }
+
   items.delete(id);
 
   return cart();
