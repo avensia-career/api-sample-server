@@ -16,7 +16,8 @@ server.use(cookieParser());
 
 /**
  * Products API
- *
+ * GET `/products` - Get all products
+ * GET `/products/:id` - Get product by id
  */
 
 const products = require("./products");
@@ -39,7 +40,11 @@ server.use("/products", productsRouter);
 
 /**
  * Cart API
- *
+ * GET `/cart` - Get cart items with summary
+ * DELETE `/cart` - Empty cart
+ * POST `/cart/:id` `quantity?: number` - Add `quantity` to item with `id`
+ * PUT `/cart/:id` `quantity: number` - Update `quantity` to item with `id`
+ * DELETE `/cart/:id` - Remove item with `id`
  */
 
 const Cart = require("./cart");
