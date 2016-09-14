@@ -10,6 +10,10 @@ const bodyParser = require("body-parser");
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 
+const cookieParser = require("cookie-parser");
+
+server.use(cookieParser());
+
 /**
  * Products API
  *
@@ -40,13 +44,28 @@ server.use("/products", productsRouter);
 
 const Cart = require("./cart");
 
-const cart = new Cart();
+const carts = new Map();
+let nextCartId = 1;
 
 const cartRouter = router();
 
 const cartRequest = function (action) {
   return (req, res, next) => {
-    const data = action(req, res);
+    let cart;
+
+    const cartId = +req.cookies.cart_id;
+    if (cartId && carts.has(cartId)) {
+      // Get existing cart
+      cart = carts.get(cartId);
+    } else {
+      // Create new cart
+      cart = new Cart();
+      carts.set(nextCartId, cart);
+      res.cookie("cart_id", nextCartId);
+      nextCartId++;
+    }
+
+    const data = action(cart, req, res);
     if (data instanceof Error) {
       return next(data);
     }
@@ -55,19 +74,19 @@ const cartRequest = function (action) {
 };
 
 // GET cart
-cartRouter.get("/", cartRequest(() => cart));
+cartRouter.get("/", cartRequest((c) => c));
 
 // DELETE (empty) cart
-cartRouter.delete("/", cartRequest(() => cart.clear()));
+cartRouter.delete("/", cartRequest((c) => c.clear()));
 
 // POST (create or add) quantity to item by id
-cartRouter.post("/:id", cartRequest((req) => cart.add(+req.params.id, +req.body.quantity || 1)));
+cartRouter.post("/:id", cartRequest((c, req) => c.add(+req.params.id, +req.body.quantity || 1)));
 
 // PUT (update) quantity to item by id
-cartRouter.put("/:id", cartRequest((req) => cart.update(+req.params.id, +req.body.quantity)));
+cartRouter.put("/:id", cartRequest((c, req) => c.update(+req.params.id, +req.body.quantity)));
 
 // DELETE quantity to item by id
-cartRouter.delete("/:id", cartRequest((req) => cart.remove(+req.params.id)));
+cartRouter.delete("/:id", cartRequest((c, req) => c.remove(+req.params.id)));
 
 server.use("/cart", cartRouter);
 
