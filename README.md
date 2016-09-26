@@ -81,7 +81,6 @@ Remove item with `:id`. Responds with full updated cart.
 type Product = {
   id: number;
   title: string;
-  description: string;
   imageUrl: string;
   url: string; // Absolute URL to API
   prices: Price[];

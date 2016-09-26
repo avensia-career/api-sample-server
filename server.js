@@ -95,6 +95,9 @@ cartRouter.delete("/:id", cartRequest((c, req) => c.remove(+req.params.id)));
 
 server.use("/cart", cartRouter);
 
+// images
+server.use("/images", express.static("images"));
+
 // Error handling
 server.use((req, res, next) => next(new Error("Request not found")));
 

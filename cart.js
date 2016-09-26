@@ -3,7 +3,7 @@
 const products = require("./products");
 
 const isProduct = function (id) {
-  if (id in products) {
+  if (!products.every((p) => p.id !== id)) {
     return true;
   }
   return new Error(`There's no product with id: ${id}`);
@@ -52,7 +52,7 @@ class Cart {
       this.items.set(id, item);
     } else {
       this.items.set(id, {
-        product: products[id],
+        product: products.find((p) => p.id === id),
         quantity
       });
     }
