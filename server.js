@@ -5,6 +5,10 @@ const express = require("express");
 const router = express.Router;
 const server = express();
 
+const cors = require("cors");
+
+server.use(cors());
+
 const bodyParser = require("body-parser");
 
 server.use(bodyParser.urlencoded({ extended: true }));
