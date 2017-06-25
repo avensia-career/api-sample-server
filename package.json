@@ -9,16 +9,16 @@
     "api-server": "./bin.js"
   },
   "devDependencies": {
-    "babel-eslint": "6.1.2",
-    "eslint": "3.5.0",
-    "eslint-config-formidable": "1.0.1",
-    "eslint-plugin-filenames": "1.1.0",
-    "eslint-plugin-import": "1.15.0"
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.1.0",
+    "eslint-config-formidable": "^3.0.0",
+    "eslint-plugin-filenames": "^1.2.0",
+    "eslint-plugin-import": "^2.6.0"
   },
   "dependencies": {
-    "body-parser": "1.15.2",
+    "body-parser": "^1.17.2",
     "cookie-parser": "1.4.3",
-    "cors": "2.8.1",
-    "express": "4.14.0"
+    "cors": "^2.8.3",
+    "express": "^4.15.3"
   }
 }
