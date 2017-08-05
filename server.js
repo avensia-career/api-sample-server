@@ -4,6 +4,7 @@ const express = require("express");
 
 const router = express.Router;
 const server = express();
+const path = require("path");
 
 const cors = require("cors");
 
@@ -100,7 +101,7 @@ cartRouter.delete("/:id", cartRequest((c, req) => c.remove(+req.params.id)));
 server.use("/cart", cartRouter);
 
 // images
-server.use("/images", express.static("images"));
+server.use("/images", express.static(path.join(__dirname + "/images")));
 
 // Error handling
 server.use((req, res, next) => next(new Error("Request not found")));
