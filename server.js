@@ -8,7 +8,10 @@ const path = require("path");
 
 const cors = require("cors");
 
-server.use(cors());
+server.use(cors({
+  credentials: true,
+  origin: 'http://localhost:8080'
+}));
 
 const bodyParser = require("body-parser");
 
