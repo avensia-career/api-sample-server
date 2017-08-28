@@ -34,11 +34,9 @@ productsRouter.get("/", (req, res) => res.json(products));
 // GET product by id
 productsRouter.get("/:id", (req, res, next) => {
   const id = req.params.id;
-  for (var i = 0; i < products.length; i++) {
-    if (products[i].id == id) {
-      res.json(products[i]);
-      break;
-    }
+  const product = products.find(p => String(p.id) === id);
+  if (product) {
+    return res.json(product);
   }
   return next(new Error("Product doesn\'t exist"));
 });
