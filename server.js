@@ -10,7 +10,7 @@ const cors = require("cors");
 
 server.use(cors({
   credentials: true,
-  origin: 'http://localhost:8080'
+  origin: true
 }));
 
 const bodyParser = require("body-parser");
