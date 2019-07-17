@@ -8,10 +8,12 @@ const path = require("path");
 
 const cors = require("cors");
 
-server.use(cors({
-  credentials: true,
-  origin: true
-}));
+server.use(
+  cors({
+    credentials: true,
+    origin: true
+  })
+);
 
 const bodyParser = require("body-parser");
 
@@ -42,7 +44,7 @@ productsRouter.get("/:id", (req, res, next) => {
   if (product) {
     return res.json(product);
   }
-  return next(new Error("Product doesn\'t exist"));
+  return next(new Error("Product doesn't exist"));
 });
 
 server.use("/products", productsRouter);
@@ -63,7 +65,7 @@ let nextCartId = 1;
 
 const cartRouter = router();
 
-const cartRequest = function (action) {
+const cartRequest = function(action) {
   return (req, res, next) => {
     let cart;
 
@@ -88,16 +90,22 @@ const cartRequest = function (action) {
 };
 
 // GET cart
-cartRouter.get("/", cartRequest((c) => c));
+cartRouter.get("/", cartRequest(c => c));
 
 // DELETE (empty) cart
-cartRouter.delete("/", cartRequest((c) => c.clear()));
+cartRouter.delete("/", cartRequest(c => c.clear()));
 
 // POST (create or add) quantity to item by id
-cartRouter.post("/:id", cartRequest((c, req) => c.add(+req.params.id, +req.body.quantity || 1)));
+cartRouter.post(
+  "/:id",
+  cartRequest((c, req) => c.add(+req.params.id, +req.body.quantity || 1))
+);
 
 // PUT (update) quantity to item by id
-cartRouter.put("/:id", cartRequest((c, req) => c.update(+req.params.id, +req.body.quantity)));
+cartRouter.put(
+  "/:id",
+  cartRequest((c, req) => c.update(+req.params.id, +req.body.quantity))
+);
 
 // DELETE quantity to item by id
 cartRouter.delete("/:id", cartRequest((c, req) => c.remove(+req.params.id)));
@@ -111,7 +119,9 @@ server.use("/images", express.static(path.join(__dirname + "/images")));
 server.use((req, res, next) => next(new Error("Request not found")));
 
 const errorBadRequest = 400;
-server.use((error, req, res, next) => res.status(errorBadRequest).json({ error: error.message }));
+server.use((error, req, res, next) =>
+  res.status(errorBadRequest).json({ error: error.message })
+);
 
 // Change port by running `$ SERVER_PORT=XXXX npm start`
 const defaultPort = 8181;

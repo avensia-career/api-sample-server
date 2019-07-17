@@ -33,43 +33,43 @@ $ SERVER_PORT=8282 node_modules/.bin/api-server
 
 ### [`GET /products`](http://localhost:8181/products)
 
-*No parameters*
+_No parameters_
 
 Responds with an `Array` containing all products.
 
 ### `GET /products/:id`
 
-*No parameters*
+_No parameters_
 
 Responds with product identified with the given `:id`.
 
 ### [`GET /cart`](http://localhost:8181/cart)
 
-*No parameters*
+_No parameters_
 
 Responds with full cart. Cart items and summary.
 
 ### `DELETE /cart`
 
-*No parameters*
+_No parameters_
 
 Empty cart. Responds with full updated cart.
 
 ### `POST /cart/:id`
 
-*Parameters: `quantity=[number]`*
+_Parameters: `quantity=[number]`_
 
 Add `quantity` to item with product identified with `:id`. Responds with full updated cart.
 
 ### `PUT /cart/:id`
 
-*Parameters: `quantity=[number]`*
+_Parameters: `quantity=[number]`_
 
 Update `quantity` to item with product identified with `:id`. If item doesn't exist in cart, it will be added with the given `quantity`. Responds with full updated cart.
 
 ### `DELETE /cart/:id`
 
-*No parameters*
+_No parameters_
 
 Remove item with `:id`. Responds with full updated cart.
 
@@ -98,7 +98,7 @@ type Price = {
 type Cart = {
   items: Item[];
   summary: Price[];
-}
+};
 
 type Item = {
   product: Product;
