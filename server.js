@@ -98,13 +98,13 @@ cartRouter.delete("/", cartRequest(c => c.clear()));
 // POST (create or add) quantity to item by id
 cartRouter.post(
   "/:id",
-  cartRequest((c, req) => c.add(+req.params.id, +req.body.quantity || 1))
+  cartRequest((c, req) => c.add(+req.params.id, +req.query.quantity || 1))
 );
 
 // PUT (update) quantity to item by id
 cartRouter.put(
   "/:id",
-  cartRequest((c, req) => c.update(+req.params.id, +req.body.quantity))
+  cartRequest((c, req) => c.update(+req.params.id, +req.query.quantity))
 );
 
 // DELETE quantity to item by id
