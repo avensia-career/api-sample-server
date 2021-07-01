@@ -31,6 +31,9 @@ $ SERVER_PORT=8282 node_modules/.bin/api-server
 
 ## API
 
+NOTE: credentials are required  (`credentials:'include'`)
+
+
 ### [`GET /products`](http://localhost:8181/products)
 
 _No parameters_
