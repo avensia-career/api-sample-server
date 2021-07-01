@@ -31,7 +31,7 @@ $ SERVER_PORT=8282 node_modules/.bin/api-server
 
 ## API
 
-NOTE: credentials are required  (`credentials:'include'`)
+NOTE: The credentials header is required  (`credentials:'include'`) for cart state to work. 
 
 
 ### [`GET /products`](http://localhost:8181/products)
